@@ -25,3 +25,5 @@ yarn-error.log*
 .idea
 /api/tsconfig.build.tsbuildinfo
 /api/tsconfig.tsbuildinfo
+
+/api/db.sqlite
