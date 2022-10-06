@@ -16,6 +16,7 @@ export class UsersService {
 
     user.login = createUserInput.login;
     user.email = createUserInput.email;
+    user.password = createUserInput.password;
 
     await this.userRepository.save(user);
 
@@ -28,6 +29,13 @@ export class UsersService {
 
   findOne(id: number) {
     return `This action returns a #${id} user`;
+  }
+
+  async findByLogin(login: string): Promise<User | null> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where('user.login = :login', { login: login })
+      .getOne();
   }
 
   update(id: number, updateUserInput: UpdateUserInput) {

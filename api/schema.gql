@@ -8,24 +8,49 @@ type User {
   email: String!
 }
 
+type Movie {
+  id: Int!
+  original_title: String!
+  release_date: String!
+  poster_path: String!
+  popularity: Float!
+}
+
+type LoginResponse {
+  access_token: String!
+  user: User!
+}
+
 type Query {
   users: [User!]!
   user(id: Int!): User!
+  popularMovies: [Movie!]!
+  upcomingMovies: [Movie!]!
+  discoverMovies: [Movie!]!
+  movie(id: Int!): Movie!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(id: Int!): User!
+  login(loginInput: LoginInput!): LoginResponse!
 }
 
 input CreateUserInput {
   login: String!
   email: String!
+  password: String!
 }
 
 input UpdateUserInput {
   login: String
   email: String
+  password: String
   id: Int!
+}
+
+input LoginInput {
+  login: String!
+  password: String!
 }
