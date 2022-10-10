@@ -4,6 +4,8 @@ import { LoginResponse } from './dto/login-response';
 import { LoginInput } from './dto/login-input';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from './gql-auth.guard';
+import { User } from '../users/entities/user.entity';
+import { RegisterInput } from './dto/register-input';
 
 @Resolver()
 export class AuthResolver {
@@ -13,5 +15,10 @@ export class AuthResolver {
   @UseGuards(GqlAuthGuard)
   login(@Args('loginInput') loginInput: LoginInput, @Context() context) {
     return this.authService.login(context.user);
+  }
+
+  @Mutation(() => User)
+  register(@Args('registerInput') input: RegisterInput) {
+    return this.authService.register(input);
   }
 }
