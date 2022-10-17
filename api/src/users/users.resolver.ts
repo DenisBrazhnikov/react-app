@@ -1,7 +1,6 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
-import { UpdateUserInput } from './dto/update-user.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -20,13 +19,9 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
-  @Mutation(() => User)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput);
-  }
-
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.remove(id);
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => User, { name: 'addMovie' })
+  addMovie(@Args('id', { type: () => Int }) id: number, @Context() context) {
+    //return this.movieService.addFavorite(id, context.user);
   }
 }

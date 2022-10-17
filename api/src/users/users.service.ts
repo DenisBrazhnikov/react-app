@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateUserInput } from './dto/update-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -36,13 +35,5 @@ export class UsersService {
       .createQueryBuilder('user')
       .where('user.login = :login', { login: login })
       .getOne();
-  }
-
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
   }
 }
