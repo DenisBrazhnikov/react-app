@@ -11,7 +11,7 @@ export class Movie {
   @Field()
   release_date: string;
 
-  @Field()
+  @Field({ nullable: true })
   poster_path?: string;
 
   @Field()
