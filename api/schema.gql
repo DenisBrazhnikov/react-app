@@ -12,8 +12,18 @@ type Movie {
   id: Int!
   original_title: String!
   release_date: String!
-  poster_path: String!
+  poster_path: String
   popularity: Float!
+}
+
+type Genre {
+  id: Float!
+  name: String!
+}
+
+type Country {
+  iso_639_1: String!
+  english_name: String!
 }
 
 type LoginResponse {
@@ -26,23 +36,22 @@ type Query {
   user(id: Int!): User!
   popularMovies: [Movie!]!
   upcomingMovies: [Movie!]!
-  discoverMovies: [Movie!]!
+  discoverMovies(options: DiscoverOptions!): [Movie!]!
   movie(id: Int!): Movie!
+  getGenres: [Genre!]!
+  getCountries: [Country!]!
+}
+
+input DiscoverOptions {
+  year: String!
+  genre_id: String!
+  lang_code: String!
 }
 
 type Mutation {
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
+  addMovie(id: Int!): User!
   login(loginInput: LoginInput!): LoginResponse!
   register(registerInput: RegisterInput!): User!
-}
-
-input UpdateUserInput {
-  login: String
-  email: String
-  password: String
-  confirmPassword: String
-  id: Int!
 }
 
 input LoginInput {

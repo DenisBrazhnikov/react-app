@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import MovieDB from 'node-themoviedb';
+import { DiscoverOptions } from './dto/discover-options';
 
 @Injectable()
 export class MoviesService {
@@ -25,14 +26,28 @@ export class MoviesService {
     return response.data.results;
   }
 
-  async discover() {
+  async discover(options: DiscoverOptions) {
     const response = await this.client.discover.movie({
       query: {
-        primary_release_year: 2010,
+        primary_release_year: options.year,
+        with_genres: options.genre_id,
+        with_original_language: options.lang_code,
       },
     });
 
     return response.data.results;
+  }
+
+  async getGenres() {
+    const response = await this.client.genre.getMovieList();
+
+    return response.data.genres;
+  }
+
+  async getCountries() {
+    const response = await this.client.configuration.getLanguages();
+
+    return response.data;
   }
 
   async findOne(id: number) {
