@@ -5,26 +5,13 @@ import {AuthContext} from '../../auth/auth-context';
 import {useForm} from "../../utility/hooks";
 import {useMutation, gql} from "@apollo/client";
 import {useNavigate} from "react-router-dom";
-
-const REGISTER_USER = gql`
-    mutation Mutation(
-        $registerInput: RegisterInput!
-    ) {
-        register(
-            registerInput: $registerInput
-        ) {
-            login
-        }
-    }
-`
+import {RegisterInterface} from "../../auth/auth.interface";
 
 function Register() {
-    const context = useContext(AuthContext);
     let navigate = useNavigate();
-    const [errors, setErrors] = useState<any>([]);
 
     function registerUserCallback() {
-        registerUser().then();
+        register().then();
     }
 
     const {onChange, onSubmit, values} = useForm(registerUserCallback, {
@@ -34,18 +21,24 @@ function Register() {
         confirmPassword: '',
     })
 
-    const [registerUser, {loading}] = useMutation(REGISTER_USER, {
-        update(proxy, { data: { registerInput: userData}}) {
-            console.log('update1'); // <-- execution exceeds the code
-            context.login(userData);
-            console.log('update2'); // <-- doesn't
-            navigate('/');
-        },
-        onError({graphQLErrors}) {
-            setErrors(graphQLErrors);
-        },
-        variables: { registerInput: values }
-    });
+    const [register] = useMutation(
+        gql`
+            mutation RegisterMutation(
+                $registerInput: RegisterInput!
+            ) {
+                register(registerInput: $registerInput) {
+                    login
+                }
+            }
+        `, {
+            variables: {
+                registerInput: values as RegisterInterface
+            },
+            onCompleted: (data) => {
+                navigate('/login');
+            }
+        }
+    );
 
     return (
         <>
@@ -54,7 +47,7 @@ function Register() {
                 <br/>
                 <br/>
                 <br/>
-                <form className="border border-light bg-light shadow-sm rounded p-4">
+                <form className="border border-light bg-light shadow-sm rounded p-4" onSubmit={onSubmit}>
                     <div className="h3 mb-5 fw-normal text-center">
                         Register
                     </div>
@@ -75,16 +68,16 @@ function Register() {
                         <span className="input-group-text text-muted">
                             <FontAwesomeIcon icon={faKey} />
                         </span>
-                        <input type="password" className="form-control" placeholder="Password"/>
+                        <input type="password" name="password" onChange={onChange} className="form-control" placeholder="Password"/>
                     </div>
                     <div className="input-group mb-5">
                         <span className="input-group-text text-muted">
                             <FontAwesomeIcon icon={faKey} />
                         </span>
-                        <input type="password" className="form-control" placeholder="Confirm password"/>
+                        <input type="password" name="confirmPassword" onChange={onChange} className="form-control" placeholder="Confirm password"/>
                     </div>
 
-                    <button className="w-100 btn btn-primary fw-semibold" type="submit" onClick={onSubmit}>
+                    <button className="w-100 btn btn-primary fw-semibold" type="submit">
                         <FontAwesomeIcon icon={faRightToBracket} className="me-2"/>
                         Register
                     </button>
