@@ -5,6 +5,7 @@ import {useForm} from "../../utility/hooks";
 import {gql, useMutation} from "@apollo/client";
 import {AuthContext} from "../../auth/auth-context";
 import {useNavigate} from "react-router-dom";
+import {LoginInterface} from "../../auth/auth.interface";
 
 function Login() {
     function loginCallback() {
@@ -18,9 +19,7 @@ function Login() {
     const {onSubmit, onChange, values} = useForm(loginCallback, {
         login: '',
         password: '',
-    })
-
-    const v = values as any;
+    });
 
     const [login] = useMutation(
         gql`
@@ -36,17 +35,10 @@ function Login() {
             }
         `, {
             variables: {
-                loginInput: {
-                    login: v.login,
-                    password: v.password
-                }
+                loginInput: values as LoginInterface
             },
             onCompleted: (data) => {
-                authContext.login({
-                    user: data.login.user,
-                    token: data.login.access_token
-                });
-
+                authContext.login(data.login);
                 navigate('/');
             }
         }
