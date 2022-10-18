@@ -1,8 +1,17 @@
-import {Link, Outlet} from "react-router-dom";
+import {Link, Outlet, useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHome, faFilm} from "@fortawesome/free-solid-svg-icons";
+import {faHome, faFilm, faUser, faRightFromBracket} from "@fortawesome/free-solid-svg-icons";
+import {useContext} from "react";
+import {AuthContext} from "../auth/auth-context";
 
 function Layout() {
+    let navigate = useNavigate();
+    const {user, logout} = useContext(AuthContext);
+
+    function onLogout() {
+        logout();
+        navigate('/');
+    }
     return (
         <>
             <header className="p-3 mb-4 bg-dark">
@@ -22,10 +31,28 @@ function Layout() {
                             </li>
                         </ul>
                         <ul className="nav">
-                            <li><Link to="/login"
-                                      className="nav-link px-3 link-light fw-semibold border border-primary rounded">Login</Link>
-                            </li>
-                            <li><Link to="/register" className="nav-link px-3 link-light">Register</Link></li>
+                            {
+                                user ?
+                                    <>
+                                        <>
+                                            <li className="text-white bg-info px-2 rounded me-2">
+                                                <FontAwesomeIcon icon={faUser} className="me-1"/> {user.login}
+                                            </li>
+                                            |
+                                            <li className="text-white" onClick={onLogout} role="button">
+                                                <FontAwesomeIcon icon={faRightFromBracket} />
+                                            </li>
+                                        </>
+                                    </>
+                                    :
+                                    <>
+                                        <li><Link to="/login"
+                                                  className="nav-link px-3 link-light fw-semibold border border-primary rounded">Login</Link>
+                                        </li>
+                                        <li><Link to="/register" className="nav-link px-3 link-light">Register</Link>
+                                        </li>
+                                    </>
+                            }
                         </ul>
                     </div>
                 </div>
