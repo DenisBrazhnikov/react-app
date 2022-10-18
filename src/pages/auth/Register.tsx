@@ -1,7 +1,6 @@
-import React, {useContext, useState} from "react";
+import React from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser, faAt, faKey, faRightToBracket} from "@fortawesome/free-solid-svg-icons";
-import {AuthContext} from '../../auth/auth-context';
 import {useForm} from "../../utility/hooks";
 import {useMutation, gql} from "@apollo/client";
 import {useNavigate} from "react-router-dom";
