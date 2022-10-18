@@ -1,5 +1,6 @@
 import jwtDecode from "jwt-decode";
 import React, {useReducer, createContext} from "react";
+import {AuthInterface} from "./auth.interface";
 
 const initialState = {
     user: null,
@@ -15,7 +16,7 @@ if(localStorage.getItem('token')) {
     }
 }
 
-const AuthContext = createContext({
+const AuthContext = createContext<AuthInterface>({
     user: null,
     login: (userData: any) => {},
     logout: () => {}
